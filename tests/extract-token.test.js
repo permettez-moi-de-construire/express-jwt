@@ -19,7 +19,7 @@ describe('extractToken function', () => {
       })
     })
       .then(() => {
-        assert.equal(req[reqKey], expectedVal)
+        assert.propertyVal(req, reqKey, expectedVal)
       })
   }
 
@@ -96,7 +96,7 @@ describe('extractToken function', () => {
     return assertion(req)
   })
 
-  it('should retrieve token from query when specified with default params', () => {
+  it('should retrieve token from query "access_token" when specified with default params', () => {
     const tokenKey = 'access_token'
     const tokenValue = 'bar'
 
@@ -116,7 +116,7 @@ describe('extractToken function', () => {
     return assertion(req)
   })
 
-  it('should retrieve token from headers when specified with default params', () => {
+  it('should retrieve token from "authorization: Bearer XXXXX" headers when specified with default params', () => {
     const tokenKey = 'authorization'
     const headerTokenPrefix = 'Bearer '
     const tokenValue = 'bar'
@@ -137,19 +137,40 @@ describe('extractToken function', () => {
     return assertion(req)
   })
 
-  const assertError = (opts, type) => req => {
+  it('should set the token inside req.token with default params', () => {
+    const tokenKey = 'access_token'
+    const tokenValue = 'bar'
+
+    const reqKey = 'token'
+
+    const req = {
+      query: {
+        [tokenKey]: tokenValue
+      }
+    }
+
+    const opts = null
+
+    const assertion = assertOk(opts, reqKey, tokenValue)
+    return assertion(req)
+  })
+
+  const assertError = (opts, reqKey, type) => req => {
     return new Promise((resolve, reject) => {
       extractToken(opts)(req, null, err => {
-        assert.exists(err)
-        resolve(err)
+        try {
+          assert.exists(err)
+          assert.instanceOf(err, type)
+          assert.notProperty(req, reqKey)
+          resolve()
+        } catch(err) {
+          reject(err)
+        }
       })
     })
-      .then(err => {
-        assert.instanceOf(err, type)
-      })
   }
 
-  it('should throw when token was defined multiple times', () => {
+  it('should throw when token was defined multiple times (body + query)', () => {
     const bodyTokenKey = 'foo'
     const queryTokenKey = 'fii'
     const tokenValue = 'bar'
@@ -173,7 +194,63 @@ describe('extractToken function', () => {
       to: reqKey
     }
 
-    const errorAssertion = assertError(opts, MultipleTokenError)
+    const errorAssertion = assertError(opts, reqKey, MultipleTokenError)
+    return errorAssertion(req)
+  })
+
+  it('should throw when token was defined multiple times (query + header implicit)', () => {
+    const headerTokenKey = 'authorization'
+    const headerPrefix = 'Bearer '
+    const queryTokenKey = 'fii'
+    const tokenValue = 'bar'
+
+    const reqKey = 'token'
+
+    const req = {
+      query: {
+        [queryTokenKey]: tokenValue
+      },
+      headers: {
+        [headerTokenKey]: `${headerPrefix}${tokenValue}`
+      }
+    }
+
+    const opts = {
+      from: {
+        query: queryTokenKey
+      },
+      to: reqKey
+    }
+
+    const errorAssertion = assertError(opts, reqKey, MultipleTokenError)
+    return errorAssertion(req)
+  })
+
+  it('should throw when token was defined multiple times (query implicit + body differents)', () => {
+    const bodyTokenKey = 'foo'
+    const queryTokenKey = 'access_token'
+    const bodyTokenValue = 'bar'
+    const queryTokenValue = 'baz'
+
+    const reqKey = 'token'
+
+    const req = {
+      query: {
+        [queryTokenKey]: queryTokenValue
+      },
+      body: {
+        [bodyTokenKey]: bodyTokenValue
+      }
+    }
+
+    const opts = {
+      from: {
+        body: bodyTokenKey
+      },
+      to: reqKey
+    }
+
+    const errorAssertion = assertError(opts, reqKey, MultipleTokenError)
     return errorAssertion(req)
   })
 })
