@@ -61,7 +61,8 @@ function extractTokenFactory(opts) {
         prefix: DEFAULT_HEADER_PREFIX
       }
     },
-    to: 'token'
+    to: 'token',
+    multiTolerant: false
   }
 
   const parsedOps = {
@@ -84,7 +85,7 @@ function extractTokenFactory(opts) {
         .map(([key, extractor]) => [key, extractor(req)])
         .filter(([key, token]) => !!token)
 
-      if (foundTokens.length > 1) {
+      if (!parsedOps.multiTolerant && foundTokens.length > 1) {
         throw new MultipleTokenError(foundTokens.map(([key, extractor]) => key))
       }
 

@@ -253,4 +253,89 @@ describe('extractToken function', () => {
     const errorAssertion = assertError(opts, reqKey, MultipleTokenError)
     return errorAssertion(req)
   })
+
+  it('should throw when token was defined multiple times (body + query)', () => {
+    const bodyTokenKey = 'foo'
+    const queryTokenKey = 'fii'
+    const tokenValue = 'bar'
+
+    const reqKey = 'token'
+
+    const req = {
+      body: {
+        [bodyTokenKey]: tokenValue
+      },
+      query: {
+        [queryTokenKey]: tokenValue
+      }
+    }
+
+    const opts = {
+      from: {
+        body: bodyTokenKey,
+        query: queryTokenKey
+      },
+      to: reqKey
+    }
+
+    const errorAssertion = assertError(opts, reqKey, MultipleTokenError)
+    return errorAssertion(req)
+  })
+
+  it('should throw when token was defined multiple times (query + header implicit)', () => {
+    const headerTokenKey = 'authorization'
+    const headerPrefix = 'Bearer '
+    const queryTokenKey = 'fii'
+    const tokenValue = 'bar'
+
+    const reqKey = 'token'
+
+    const req = {
+      query: {
+        [queryTokenKey]: tokenValue
+      },
+      headers: {
+        [headerTokenKey]: `${headerPrefix}${tokenValue}`
+      }
+    }
+
+    const opts = {
+      from: {
+        query: queryTokenKey
+      },
+      to: reqKey
+    }
+
+    const errorAssertion = assertError(opts, reqKey, MultipleTokenError)
+    return errorAssertion(req)
+  })
+
+  it('should retrieve token when defined multiple times with multipleTolerant option', () => {
+    const bodyTokenKey = 'foo'
+    const queryTokenKey = 'access_token'
+    const bodyTokenValue = 'bar'
+    const queryTokenValue = 'baz'
+
+    const reqKey = 'token'
+
+    const req = {
+      query: {
+        [queryTokenKey]: queryTokenValue
+      },
+      body: {
+        [bodyTokenKey]: bodyTokenValue
+      }
+    }
+
+    const opts = {
+      from: {
+        body: bodyTokenKey
+      },
+      to: reqKey,
+      multiTolerant: true
+    }
+
+    const assertion = assertOk(opts, reqKey, queryTokenValue)
+    return assertion(req)
+  })
 })
