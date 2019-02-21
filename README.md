@@ -1,7 +1,7 @@
-# express-bearer-token [![Build Status](https://secure.travis-ci.org/tkellen/js-express-bearer-token.png)](http://travis-ci.org/tkellen/js-express-bearer-token)
+# @permettezmoideconstruire/gml-to-geojson [![Build Status](https://secure.travis-ci.org/permettez-moi-de-construire/express-jwt.png)](http://travis-ci.org/permettez-moi-de-construire/express-jwt)
 > Bearer token middleware for express.
 
-[![NPM](https://nodei.co/npm/express-bearer-token.png)](https://nodei.co/npm/express-bearer-token/)
+[![NPM](https://nodei.co/npm/@permettezmoideconstruire/gml-to-geojson.png)](https://nodei.co/npm/@permettezmoideconstruire/gml-to-geojson/)
 
 ## What?
 
@@ -15,7 +15,7 @@ If a token is found, it will be stored on `req.token`.  If one has been provided
 
 ```js
 const express = require('express');
-const bearerToken = require('express-bearer-token');
+const bearerToken = require('@permettez-moi-de-construire/jwt-express');
 const app = express();
 
 app.use(bearerToken());
