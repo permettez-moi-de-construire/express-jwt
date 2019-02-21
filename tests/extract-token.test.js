@@ -338,4 +338,75 @@ describe('extractToken function', () => {
     const assertion = assertOk(opts, reqKey, queryTokenValue)
     return assertion(req)
   })
+
+  it('should prioritize token from query when defined multiple times with multipleTolerant option', () => {
+    const bodyTokenKey = 'foo'
+    const queryTokenKey = 'access_token'
+    const headerTokenKey = 'authorization'
+    const headerPrefix = 'Bearer '
+    const bodyTokenValue = 'bar'
+    const queryTokenValue = 'baz'
+    const headerTokenValue = 'bat'
+
+    const reqKey = 'token'
+
+    const req = {
+      headers: {
+        [headerTokenKey]: `${headerPrefix}${headerTokenValue}`
+      },
+      body: {
+        [bodyTokenKey]: bodyTokenValue
+      },
+      query: {
+        [queryTokenKey]: queryTokenValue
+      }
+    }
+
+    const opts = {
+      from: {
+        body: bodyTokenKey
+      },
+      to: reqKey,
+      multiTolerant: true
+    }
+
+    const assertion = assertOk(opts, reqKey, queryTokenValue)
+    return assertion(req)
+  })
+
+  it('should prioritize token from body when defined multiple times with multipleTolerant option', () => {
+    const bodyTokenKey = 'foo'
+    const queryTokenKey = 'access_token'
+    const headerTokenKey = 'authorization'
+    const headerPrefix = 'Bearer '
+    const bodyTokenValue = 'bar'
+    const queryTokenValue = 'baz'
+    const headerTokenValue = 'bat'
+
+    const reqKey = 'token'
+
+    const req = {
+      headers: {
+        [headerTokenKey]: `${headerPrefix}${headerTokenValue}`
+      },
+      body: {
+        [bodyTokenKey]: bodyTokenValue
+      },
+      query: {
+        [queryTokenKey]: queryTokenValue
+      }
+    }
+
+    const opts = {
+      from: {
+        body: bodyTokenKey,
+        query: null
+      },
+      to: reqKey,
+      multiTolerant: true
+    }
+
+    const assertion = assertOk(opts, reqKey, bodyTokenValue)
+    return assertion(req)
+  })
 })
