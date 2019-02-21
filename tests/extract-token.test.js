@@ -9,6 +9,11 @@ const {
   JwtError,
   MultipleTokenError
 } = extractToken
+const {
+  bodyBaseExtractor,
+  queryBaseExtractor,
+  headerBasePrefixedExtractor
+} = extractToken.extractors
 
 describe('extractToken function', () => {
   const assertOk = (opts, reqKey, expectedVal) => req => {
@@ -37,7 +42,7 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        body: tokenKey
+        body: bodyBaseExtractor(tokenKey)
       },
       to: reqKey
     }
@@ -60,7 +65,7 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        query: tokenKey
+        query: queryBaseExtractor(tokenKey)
       },
       to: reqKey
     }
@@ -84,10 +89,10 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        header: {
+        header: headerBasePrefixedExtractor({
           prefix: headerTokenPrefix,
           key: tokenKey
-        }
+        })
       },
       to: reqKey
     }
@@ -188,8 +193,8 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        body: bodyTokenKey,
-        query: queryTokenKey
+        body: bodyBaseExtractor(bodyTokenKey),
+        query: queryBaseExtractor(queryTokenKey)
       },
       to: reqKey
     }
@@ -198,7 +203,7 @@ describe('extractToken function', () => {
     return errorAssertion(req)
   })
 
-  it('should throw when token was defined multiple times (query + header implicit)', () => {
+  it('should throw when token was defined multiple times (query + header)', () => {
     const headerTokenKey = 'authorization'
     const headerPrefix = 'Bearer '
     const queryTokenKey = 'fii'
@@ -217,7 +222,11 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        query: queryTokenKey
+        query: queryBaseExtractor(queryTokenKey),
+        header: headerBasePrefixedExtractor({
+          key: headerTokenKey,
+          prefix: headerPrefix
+        })
       },
       to: reqKey
     }
@@ -226,7 +235,7 @@ describe('extractToken function', () => {
     return errorAssertion(req)
   })
 
-  it('should throw when token was defined multiple times (query implicit + body differents)', () => {
+  it('should throw when token was defined multiple times (query + body differents)', () => {
     const bodyTokenKey = 'foo'
     const queryTokenKey = 'access_token'
     const bodyTokenValue = 'bar'
@@ -245,7 +254,8 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        body: bodyTokenKey
+        query: queryBaseExtractor(queryTokenKey),
+        body: bodyBaseExtractor(bodyTokenKey)
       },
       to: reqKey
     }
@@ -272,8 +282,8 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        body: bodyTokenKey,
-        query: queryTokenKey
+        body: bodyBaseExtractor(bodyTokenKey),
+        query: queryBaseExtractor(queryTokenKey)
       },
       to: reqKey
     }
@@ -282,7 +292,7 @@ describe('extractToken function', () => {
     return errorAssertion(req)
   })
 
-  it('should throw when token was defined multiple times (query + header implicit)', () => {
+  it('should throw when token was defined multiple times (query + header)', () => {
     const headerTokenKey = 'authorization'
     const headerPrefix = 'Bearer '
     const queryTokenKey = 'fii'
@@ -301,7 +311,11 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        query: queryTokenKey
+        query: queryBaseExtractor(queryTokenKey),
+        header: headerBasePrefixedExtractor({
+          prefix: headerPrefix,
+          key: headerTokenKey
+        })
       },
       to: reqKey
     }
@@ -329,31 +343,26 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        body: bodyTokenKey
+        body: bodyBaseExtractor(bodyTokenKey),
+        query: queryBaseExtractor(queryTokenKey)
       },
       to: reqKey,
       multiTolerant: true
     }
 
-    const assertion = assertOk(opts, reqKey, queryTokenValue)
+    const assertion = assertOk(opts, reqKey, bodyTokenValue)
     return assertion(req)
   })
 
   it('should prioritize token from query when defined multiple times with multipleTolerant option', () => {
     const bodyTokenKey = 'foo'
     const queryTokenKey = 'access_token'
-    const headerTokenKey = 'authorization'
-    const headerPrefix = 'Bearer '
     const bodyTokenValue = 'bar'
     const queryTokenValue = 'baz'
-    const headerTokenValue = 'bat'
 
     const reqKey = 'token'
 
     const req = {
-      headers: {
-        [headerTokenKey]: `${headerPrefix}${headerTokenValue}`
-      },
       body: {
         [bodyTokenKey]: bodyTokenValue
       },
@@ -364,7 +373,8 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        body: bodyTokenKey
+        query: queryBaseExtractor(queryTokenKey),
+        body: bodyBaseExtractor(bodyTokenKey)
       },
       to: reqKey,
       multiTolerant: true
@@ -399,14 +409,18 @@ describe('extractToken function', () => {
 
     const opts = {
       from: {
-        body: bodyTokenKey,
-        query: null
+        header: headerBasePrefixedExtractor({
+          key: headerTokenKey,
+          prefix: headerPrefix
+        }),
+        body: bodyBaseExtractor(bodyTokenKey),
+        query: queryBaseExtractor(queryTokenKey)
       },
       to: reqKey,
       multiTolerant: true
     }
 
-    const assertion = assertOk(opts, reqKey, bodyTokenValue)
+    const assertion = assertOk(opts, reqKey, headerTokenValue)
     return assertion(req)
   })
 })

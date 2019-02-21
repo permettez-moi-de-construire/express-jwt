@@ -55,12 +55,12 @@ const DEFAULT_HEADER_PREFIX = 'Bearer '
 function extractTokenFactory(opts) {
   const defaultOps = {
     from: {
-      query: DEFAULT_QUERY_KEY,
+      query: queryBaseExtractor(DEFAULT_QUERY_KEY),
       // body: 'access_token',
-      header: {
+      header: headerBasePrefixedExtractor({
         key: DEFAULT_HEADER_KEY,
         prefix: DEFAULT_HEADER_PREFIX
-      }
+      })
     },
     to: 'token',
     multiTolerant: false
@@ -68,17 +68,10 @@ function extractTokenFactory(opts) {
 
   const parsedOps = {
     ...defaultOps,
-    ...opts,
-    from: {
-      ...defaultOps.from,
-      ...(opts ? opts.from : {})
-    }
+    ...opts
   }
 
-  const relevantExtractorsEntries = Object
-    .entries(baseExtractors)
-    .filter(([key, extractor]) => (key in parsedOps.from))
-    .map(([key, extractor]) => [key, extractor(parsedOps.from[key])])
+  const relevantExtractorsEntries = Object.entries(parsedOps.from)
 
   return function (req, res, next) {
     try {
@@ -102,5 +95,11 @@ function extractTokenFactory(opts) {
 
 extractTokenFactory.JwtError = JwtError
 extractTokenFactory.MultipleTokenError = MultipleTokenError
+
+extractTokenFactory.extractors = {
+  bodyBaseExtractor,
+  queryBaseExtractor,
+  headerBasePrefixedExtractor
+}
 
 module.exports = extractTokenFactory
