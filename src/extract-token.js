@@ -41,6 +41,7 @@ const headerBasePrefixedExtractor = ({key, prefix}) => req => {
   return req.headers[key].slice(prefix.length)
 }
 
+// That order defines priority when multiTolerant
 const baseExtractors = {
   query: queryBaseExtractor,
   body: bodyBaseExtractor,
