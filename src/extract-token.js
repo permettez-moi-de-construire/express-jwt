@@ -1,6 +1,3 @@
-const deepMerge = require('lodash/merge')
-const fromEntries = require('lodash/fromPairs')
-
 class JwtError extends Error {
   constructor(message) {
     super(message)
@@ -50,20 +47,31 @@ const baseExtractors = {
   header: headerBasePrefixedExtractor
 }
 
+const DEFAULT_QUERY_KEY = 'access_token'
+const DEFAULT_HEADER_KEY = 'authorization'
+const DEFAULT_HEADER_PREFIX = 'Bearer '
+
 function extractTokenFactory(opts) {
   const defaultOps = {
     from: {
-      query: 'access_token',
+      query: DEFAULT_QUERY_KEY,
       // body: 'access_token',
       header: {
-        key: 'authorization',
-        prefix: 'Bearer '
+        key: DEFAULT_HEADER_KEY,
+        prefix: DEFAULT_HEADER_PREFIX
       }
     },
     to: 'token'
   }
 
-  const parsedOps = deepMerge({}, defaultOps, opts)
+  const parsedOps = {
+    ...defaultOps,
+    ...opts,
+    from: {
+      ...defaultOps.from,
+      ...(opts ? opts.from : {})
+    }
+  }
 
   const relevantExtractorsEntries = Object
     .entries(baseExtractors)
