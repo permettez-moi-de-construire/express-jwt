@@ -1,7 +1,7 @@
 # @permettezmoideconstruire/gml-to-geojson [![Build Status](https://secure.travis-ci.org/permettez-moi-de-construire/express-jwt.png)](http://travis-ci.org/permettez-moi-de-construire/express-jwt)
 > Bearer token middleware for express.
 
-[![NPM](https://nodei.co/npm/@permettezmoideconstruire/gml-to-geojson.png)](https://nodei.co/npm/@permettezmoideconstruire/gml-to-geojson/)
+[![NPM](https://nodei.co/npm/@permettezmoideconstruire/express-jwt.png)](https://nodei.co/npm/@permettezmoideconstruire/express-jwt/)
 
 ## What?
 

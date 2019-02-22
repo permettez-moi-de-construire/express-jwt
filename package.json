@@ -6,7 +6,9 @@
   "scripts": {
     "hint": "standard",
     "test": "mocha tests/**/*.test.js",
-    "prepublishOnly": "npm run hint && npm run test"
+    "check": "npm run hint && npm run test",
+    "prepublishOnly": "npm run check",
+    "version": "npm run check"
   },
   "repository": {
     "type": "git",
