@@ -1,6 +1,6 @@
 {
   "name": "@permettez-moi-de-construire/express-jwt",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Jwt helpers Express middlewares style",
   "main": "index.js",
   "scripts": {
