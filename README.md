@@ -3,37 +3,118 @@
 
 [![NPM](https://nodei.co/npm/@permettezmoideconstruire/express-jwt.png)](https://nodei.co/npm/@permettezmoideconstruire/express-jwt/)
 
-## What?
+## API
 
-Per [RFC6750] this module will attempt to extract a bearer token from a request from these locations:
+```
+const {
+  extractToken,
+  verifyToken
+} = require('@permettezmoideconstruire/express-jwt')
+```
+
+### `extractToken(options)`
+
+`extractToken` is a middleware factory.
+
+Per [RFC6750] the returned middleware will attempt to extract a bearer token from a request from these locations:
 
 * The key `access_token` in the request body.
 * The key `access_token` in the request params.
 * The value from the header `Authorization: Bearer <token>`.
 
-If a token is found, it will be stored on `req.token`.  If one has been provided in more than one location, this will abort the request immediately by sending code 400 (per [RFC6750]).
+If a token is found, it will be stored on `req.token`. If one has been provided in more than one location, this will immediately call `next` with a `MultipleTokenError` (per [RFC6750]).
 
-```js
-const express = require('express');
-const { extractToken } = require('@permettez-moi-de-construire/jwt-express');
-const app = express();
+For APIs not [RFC6750] compliant, see options :
 
-app.use(extractToken());
-app.use(function (req, res) {
-  res.send('Token ' + req.token);
-});
-app.listen(8000);
+#### Syntax
+
+```
+const express = require('express')
+const { extractToken } = require('@permettezmoideconstruire/express-jwt')
+
+const app = express()
+app.use(extractToken())
+app.use(function(req, res) {
+  console.log(req.token)
+  res.send()
+})
+
+app.use(process.env.PORT)
 ```
 
-For APIs which are not compliant with [RFC6750], the key for the token in each location is customizable, as is the key the token is bound to on the request (default configuration shown):
-```js
-app.use(bearerToken({
-  bodyKey: 'access_token',
-  queryKey: 'access_token',
-  headerKey: 'Bearer',
-  reqKey: 'token'
-}));
-```
-As of version 2.2.0 we've added initial support for TypeScript. 
+#### API
+
+- `return` _function_ : Returns the middleware
+
+- `options.from` _Object\{key: function(req) => string\}_
+  - An associative array (object) of *extractors*. An extractor is a function that takes a single `req` parameter and returns a string
+  - default:
+    ```
+    {
+      query: queryBaseExtractor('access_token'),
+      body: bodyBaseExtractor('access_token'),
+      header: headerBasePrefixedExtractor({
+        key: 'authorization',
+        prefix: 'Bearer '
+      })
+    }
+    ```
+
+- `options.to` _string_
+  - A string which is the key to place token inside `req` (for example `{ to: 'token' }` will set `req.token`)
+  - default: `'token'`
+
+- `options.multiTolerant` _bool_
+  - A boolean which switches the behavior from a "throw when token found in multiple place" strategy to a "take first found token" strategy.
+  - The concept of "first" follows the order of the keys inside `options.from`
+  - default: `false`
+
 
 [RFC6750]: https://xml.resource.org/html/rfc6750
+
+### `verifyToken(secretOrPrivateKey, options)`
+
+`verifyToken` is a middleware factory.
+
+The returned middleware verifies the token inside `req.token` and decodes it to `req.token` (transforms it actualy)
+
+If you want to keep encoded token inside `req`, or simply change input or output key, see options.
+
+#### Syntax
+
+```
+const express = require('express')
+const { extractToken, verifyToken } = require('@permettezmoideconstruire/express-jwt')
+
+const app = express()
+app.use(
+  extractToken(process.env.JWT_SECRET_KEY),
+  verifyToken()
+)
+app.use(function(req, res) {
+  console.log(req.token)
+  res.send()
+})
+
+app.use(process.env.PORT)
+```
+
+#### API
+
+- `return` _function_ : Returns the middleware
+
+- `secretOrPrivateKey` _mixed_
+  - The key that encoded the token, and should be used to decode it
+  - See [auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)
+
+- `options.from` _function(req) => string_
+  - A function that is an extractor. An extractor is a function that takes a single `req` parameter and returns a string
+  - default: `reqBaseExtractor('token')`
+
+- `options.to` _string_
+  - A string which is the key to place token inside `req` (for example `{ to: 'token' }` will set `req.token`)
+  - default: `'token'`
+
+- `options.jwt` _object_
+  - An object that represents _jwt_ options for `verify` method (this is passed down)
+  - See [auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)
