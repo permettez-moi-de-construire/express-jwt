@@ -1,7 +1,12 @@
-# @permettez-moi-de-construire/express-jwt [![Build Status](https://secure.travis-ci.org/permettez-moi-de-construire/express-jwt.png)](http://travis-ci.org/permettez-moi-de-construire/express-jwt)
+# @permettez-moi-de-construire/express-jwt [![Build Status](https://img.shields.io/travis/permettez-moi-de-construire/express-jwt.svg)](http://travis-ci.org/permettez-moi-de-construire/express-jwt) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) ![Code Size](https://img.shields.io/github/languages/code-size/permettez-moi-de-construire/express-jwt.svg) [![Dependencies Status](https://img.shields.io/librariesio/github/permettez-moi-de-construire/express-jwt.svg)](https://libraries.io/github/permettez-moi-de-construire/express-jwt)
+
 > Jwt helper middleware for express.
 
 [![NPM](https://nodei.co/npm/@permettezmoideconstruire/express-jwt.png)](https://nodei.co/npm/@permettezmoideconstruire/express-jwt/)
+
+```
+npm install --save @permettezmoideconstruire/express-jwt
+```
 
 ## API
 
