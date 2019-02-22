@@ -21,9 +21,18 @@ const headerBasePrefixedExtractor = ({key, prefix}) => req => {
   return req.headers[key].slice(prefix.length)
 }
 
+const reqBaseExtractor = key => req => {
+  if (!req) {
+    return null
+  }
+
+  return req[key]
+}
+
 module.exports = {
   flatLevel2SafeExtractor,
   bodyBaseExtractor,
   queryBaseExtractor,
-  headerBasePrefixedExtractor
+  headerBasePrefixedExtractor,
+  reqBaseExtractor
 }

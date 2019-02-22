@@ -1,24 +1,22 @@
-class JwtError extends Error {
-  constructor(message) {
-    super(message)
+const {
+  JsonWebTokenError
+} = require('jsonwebtoken')
 
-    // Ensure the name of this error is the same as the class name
-    this.name = this.constructor.name
-
-    // This clips the constructor invocation from the stack trace.
-    // It's not absolutely essential, but it does make the stack trace a little nicer.
-    Error.captureStackTrace(this, this.constructor)
-  }
-}
-
-class MultipleTokenError extends JwtError {
+class MultipleTokenError extends JsonWebTokenError {
   constructor(keys) {
     const message = `Found multiple tokens in req (${keys.join(', ')})`
     super(message)
   }
 }
 
+class InvalidTokenError extends JsonWebTokenError {
+  constructor(token) {
+    const message = `Invalid token ${token}`
+    super(message)
+  }
+}
+
 module.exports = {
-  JwtError,
-  MultipleTokenError
+  MultipleTokenError,
+  InvalidTokenError
 }
