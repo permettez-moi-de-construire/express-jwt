@@ -17,7 +17,7 @@ const {
 } = require('@permettezmoideconstruire/express-jwt')
 ```
 
-### `extractToken(options)`
+### `extractToken([options])`
 
 `extractToken` is a middleware factory.
 
@@ -77,7 +77,7 @@ app.use(process.env.PORT)
 
 [RFC6750]: https://xml.resource.org/html/rfc6750
 
-### `verifyToken(secretOrPrivateKey, options)`
+### `verifyToken(secretOrPrivateKey, [options])`
 
 `verifyToken` is a middleware factory.
 
