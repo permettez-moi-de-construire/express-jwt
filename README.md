@@ -15,12 +15,12 @@ If a token is found, it will be stored on `req.token`.  If one has been provided
 
 ```js
 const express = require('express');
-const bearerToken = require('@permettez-moi-de-construire/jwt-express');
+const { extractToken } = require('@permettez-moi-de-construire/jwt-express');
 const app = express();
 
-app.use(bearerToken());
+app.use(extractToken());
 app.use(function (req, res) {
-  res.send('Token '+req.token);
+  res.send('Token ' + req.token);
 });
 app.listen(8000);
 ```
