@@ -4,16 +4,19 @@ const {
 } = require('mocha')
 const assert = require('chai').assert
 
-const extractToken = require('../src/extract-token')
 const {
-  JwtError,
-  MultipleTokenError
-} = extractToken
-const {
-  bodyBaseExtractor,
-  queryBaseExtractor,
-  headerBasePrefixedExtractor
-} = extractToken.extractors
+  extractToken,
+  util: {
+    errors: {
+      MultipleTokenError
+    },
+    extractors: {
+      bodyBaseExtractor,
+      queryBaseExtractor,
+      headerBasePrefixedExtractor
+    }
+  }
+} = require('../index')
 
 describe('extractToken function', () => {
   const assertOk = (opts, reqKey, expectedVal) => req => {
