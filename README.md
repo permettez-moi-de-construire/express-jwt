@@ -1,5 +1,5 @@
 # @permettez-moi-de-construire/express-jwt [![Build Status](https://secure.travis-ci.org/permettez-moi-de-construire/express-jwt.png)](http://travis-ci.org/permettez-moi-de-construire/express-jwt)
-> Bearer token middleware for express.
+> Jwt helper middleware for express.
 
 [![NPM](https://nodei.co/npm/@permettezmoideconstruire/express-jwt.png)](https://nodei.co/npm/@permettezmoideconstruire/express-jwt/)
 
