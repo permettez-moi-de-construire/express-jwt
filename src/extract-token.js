@@ -8,19 +8,13 @@ const {
   MultipleTokenError
 } = require('./util/errors')
 
-// That order defines priority when multiTolerant
-const baseExtractors = {
-  query: queryBaseExtractor,
-  body: bodyBaseExtractor,
-  header: headerBasePrefixedExtractor
-}
-
 const DEFAULT_QUERY_KEY = 'access_token'
 const DEFAULT_HEADER_KEY = 'authorization'
 const DEFAULT_HEADER_PREFIX = 'Bearer '
+const DEFAULT_REQ_KEY = 'token'
 
-function extractTokenFactory(opts) {
-  const defaultOps = {
+function extractTokenFactory(opts = {}) {
+  const defaultOpts = {
     from: {
       query: queryBaseExtractor(DEFAULT_QUERY_KEY),
       // body: 'access_token',
@@ -29,18 +23,18 @@ function extractTokenFactory(opts) {
         prefix: DEFAULT_HEADER_PREFIX
       })
     },
-    to: 'token',
+    to: DEFAULT_REQ_KEY,
     multiTolerant: false
   }
 
   const parsedOps = {
-    ...defaultOps,
+    ...defaultOpts,
     ...opts
   }
 
   const relevantExtractorsEntries = Object.entries(parsedOps.from)
 
-  return function (req, res, next) {
+  const extractTokenMiddleware = (req, res, next) => {
     try {
       const foundTokens = relevantExtractorsEntries
         .map(([key, extractor]) => [key, extractor(req)])
@@ -58,6 +52,8 @@ function extractTokenFactory(opts) {
       next(err)
     }
   }
+
+  return extractTokenMiddleware
 }
 
 module.exports = extractTokenFactory
