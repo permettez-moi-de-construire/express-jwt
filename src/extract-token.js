@@ -1,5 +1,6 @@
 const {
   queryBaseExtractor,
+  bodyBaseExtractor,
   headerBasePrefixedExtractor
 } = require('./util/extractors')
 
@@ -8,6 +9,7 @@ const {
 } = require('./util/errors')
 
 const DEFAULT_QUERY_KEY = 'access_token'
+const DEFAULT_BODY_KEY = 'access_token'
 const DEFAULT_HEADER_KEY = 'authorization'
 const DEFAULT_HEADER_PREFIX = 'Bearer '
 const DEFAULT_REQ_KEY = 'token'
@@ -16,7 +18,7 @@ function extractTokenFactory (opts = {}) {
   const defaultOpts = {
     from: {
       query: queryBaseExtractor(DEFAULT_QUERY_KEY),
-      // body: 'access_token',
+      body: bodyBaseExtractor(DEFAULT_BODY_KEY),
       header: headerBasePrefixedExtractor({
         key: DEFAULT_HEADER_KEY,
         prefix: DEFAULT_HEADER_PREFIX
