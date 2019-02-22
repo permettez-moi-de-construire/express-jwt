@@ -1,6 +1,6 @@
 # @permettez-moi-de-construire/express-jwt [![Build Status](https://img.shields.io/travis/permettez-moi-de-construire/express-jwt.svg)](http://travis-ci.org/permettez-moi-de-construire/express-jwt) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) ![Code Size](https://img.shields.io/github/languages/code-size/permettez-moi-de-construire/express-jwt.svg) [![Dependencies Status](https://img.shields.io/librariesio/github/permettez-moi-de-construire/express-jwt.svg)](https://libraries.io/github/permettez-moi-de-construire/express-jwt)
 
-> Jwt helper middleware for express.
+> Jwt helper middlewares for express.
 
 [![NPM](https://nodei.co/npm/@permettezmoideconstruire/express-jwt.png)](https://nodei.co/npm/@permettezmoideconstruire/express-jwt/)
 
@@ -93,8 +93,8 @@ const { extractToken, verifyToken } = require('@permettezmoideconstruire/express
 
 const app = express()
 app.use(
-  extractToken(process.env.JWT_SECRET_KEY),
-  verifyToken()
+  extractToken(),
+  verifyToken(process.env.JWT_SECRET_KEY)
 )
 app.use(function(req, res) {
   console.log(req.token)
