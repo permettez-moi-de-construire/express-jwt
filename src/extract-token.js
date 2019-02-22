@@ -1,6 +1,5 @@
 const {
   queryBaseExtractor,
-  bodyBaseExtractor,
   headerBasePrefixedExtractor
 } = require('./util/extractors')
 
@@ -13,7 +12,7 @@ const DEFAULT_HEADER_KEY = 'authorization'
 const DEFAULT_HEADER_PREFIX = 'Bearer '
 const DEFAULT_REQ_KEY = 'token'
 
-function extractTokenFactory(opts = {}) {
+function extractTokenFactory (opts = {}) {
   const defaultOpts = {
     from: {
       query: queryBaseExtractor(DEFAULT_QUERY_KEY),

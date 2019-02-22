@@ -4,7 +4,7 @@ const flatLevel2SafeExtractor = baseFieldKey => paramKey => req => {
 
 const bodyBaseExtractor = flatLevel2SafeExtractor('body')
 const queryBaseExtractor = flatLevel2SafeExtractor('query')
-const headerBasePrefixedExtractor = ({key, prefix}) => req => {
+const headerBasePrefixedExtractor = ({ key, prefix }) => req => {
   if (!req || !req.headers || !req.headers[key]) {
     return null
   }

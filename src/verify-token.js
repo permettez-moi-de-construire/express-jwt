@@ -5,10 +5,6 @@ const {
   reqBaseExtractor
 } = require('./util/extractors')
 
-const {
-  InvalidTokenError
-} = require('./util/errors')
-
 const DEFAULT_REQ_KEY = 'token'
 const DEFAULT_OUT_REQ_KEY = 'token'
 

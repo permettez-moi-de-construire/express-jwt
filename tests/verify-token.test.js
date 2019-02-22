@@ -1,6 +1,8 @@
 const {
   describe,
-  it
+  it,
+  beforeEach,
+  afterEach
 } = require('mocha')
 const assert = require('chai').assert
 
@@ -9,9 +11,6 @@ const { sign } = require('jsonwebtoken')
 const {
   verifyToken,
   util: {
-    errors: {
-      InvalidTokenError
-    },
     extractors: {
       reqBaseExtractor
     }

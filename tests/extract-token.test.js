@@ -171,7 +171,7 @@ describe('extractToken function', () => {
           assert.instanceOf(err, type)
           assert.notProperty(req, reqKey)
           resolve()
-        } catch(err) {
+        } catch (err) {
           reject(err)
         }
       })
