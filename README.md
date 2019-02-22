@@ -4,7 +4,7 @@
 
 > Jwt helper middlewares for express.
 
-[![NPM](https://nodei.co/npm/@permettezmoideconstruire/express-jwt.svg)](https://nodei.co/npm/@permettezmoideconstruire/express-jwt/)
+[![NPM](https://nodei.co/npm/@permettezmoideconstruire/express-jwt.png)](https://nodei.co/npm/@permettezmoideconstruire/express-jwt/)
 
 ```
 npm install --save @permettezmoideconstruire/express-jwt
