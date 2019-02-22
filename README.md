@@ -1,4 +1,6 @@
-# @permettez-moi-de-construire/express-jwt [![Build Status](https://img.shields.io/travis/permettez-moi-de-construire/express-jwt.svg)](http://travis-ci.org/permettez-moi-de-construire/express-jwt) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) ![Code Size](https://img.shields.io/github/languages/code-size/permettez-moi-de-construire/express-jwt.svg) [![Dependencies Status](https://img.shields.io/librariesio/github/permettez-moi-de-construire/express-jwt.svg)](https://libraries.io/github/permettez-moi-de-construire/express-jwt)
+# @permettez-moi-de-construire/express-jwt
+
+[![Build Status](https://img.shields.io/travis/permettez-moi-de-construire/express-jwt.svg)](http://travis-ci.org/permettez-moi-de-construire/express-jwt) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) ![Code Size](https://img.shields.io/github/languages/code-size/permettez-moi-de-construire/express-jwt.svg) [![Dependencies Status](https://img.shields.io/librariesio/github/permettez-moi-de-construire/express-jwt.svg)](https://libraries.io/github/permettez-moi-de-construire/express-jwt)
 
 > Jwt helper middlewares for express.
 
